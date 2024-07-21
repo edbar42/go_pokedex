@@ -4,14 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-)
 
-const prompt = "\033[5m|> \033[0m"
+	"github.com/edbar42/go_pokedex/msg"
+)
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 
-	fmt.Print(prompt)
+	fmt.Print(msg.Prompt)
 
 	for scanner.Scan() {
 		input := scanner.Text()
@@ -23,10 +23,11 @@ func main() {
 				fmt.Println(err)
 			}
 		} else {
-			fmt.Println("Unknown command", input)
+			err := msg.CmdNotFoundErr()
+			fmt.Println(err.Error())
 		}
 
-		fmt.Print(prompt)
+		fmt.Print(msg.Prompt)
 	}
 
 	if err := scanner.Err(); err != nil {

@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/edbar42/go_pokedex/msg"
 )
 
 type Command struct {
@@ -33,9 +35,9 @@ func init() {
 
 func help() error {
 	for _, cmd := range Commands {
-		fmt.Println(cmd.Name)
-		fmt.Println("\t", cmd.Usage)
-		fmt.Println("\t", cmd.Description)
+		msg.PrintCmdName(cmd.Name)
+		msg.PrintCmdUsage(cmd.Usage)
+		fmt.Printf("\t%s\n", cmd.Description)
 	}
 	return nil
 }
