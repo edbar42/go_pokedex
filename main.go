@@ -10,6 +10,7 @@ import (
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
+	cache := newCache()
 
 	fmt.Print(msg.Prompt)
 
@@ -18,7 +19,7 @@ func main() {
 		command, exists := Commands[input]
 
 		if exists {
-			err := command.Callback()
+			err := command.Callback(&cache)
 			if err != nil {
 				fmt.Println(err)
 			}

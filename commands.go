@@ -12,7 +12,7 @@ type Command struct {
 	Name        string
 	Usage       string
 	Description string
-	Callback    func() error
+	Callback    func(c *Cache) error
 }
 
 var Commands map[string]Command
@@ -37,10 +37,16 @@ func init() {
 			Description: "Lists the next page of mapped regions.",
 			Callback:    mapn,
 		},
+		"mapb": {
+			Name:        "Map back",
+			Usage:       "mapb",
+			Description: "Lists the previous page of mapped regions.",
+			Callback:    mapp,
+		},
 	}
 }
 
-func help() error {
+func help(c *Cache) error {
 	for _, cmd := range Commands {
 		fmt.Println("------------------")
 		msg.PrintCmdName(cmd.Name)
@@ -51,14 +57,49 @@ func help() error {
 	return nil
 }
 
-func exit() error {
+func exit(c *Cache) error {
 	fmt.Println("Good luck catching them all!")
 	os.Exit(0)
 	return nil
 }
 
-func mapn() error {
-	regions, err := api.FetchMappedRegions("https://pokeapi.co/api/v2/location/")
+func mapn(c *Cache) error {
+	var reqURL string
+	if c.NextMap == nil {
+		reqURL = "https://pokeapi.co/api/v2/location/"
+	} else {
+		reqURL = *c.NextMap
+	}
+
+	regions, err := api.FetchMappedRegions(reqURL)
+	if err != nil {
+		return err
+	}
+
+	c.NextMap = regions.Next
+	c.PrevMap = regions.Previous
+
+	for _, area := range regions.Results {
+		msg.PrintAreaName(area.Name)
+	}
+
+	return err
+}
+
+func mapp(c *Cache) error {
+	if c.PrevMap == nil {
+		noPrevErr := msg.NoPrevMapError()
+		return &noPrevErr
+	}
+
+	regions, err := api.FetchMappedRegions(*c.PrevMap)
+	if err != nil {
+		return err
+	}
+
+	c.NextMap = regions.Next
+	c.PrevMap = regions.Previous
+
 	for _, area := range regions.Results {
 		msg.PrintAreaName(area.Name)
 	}

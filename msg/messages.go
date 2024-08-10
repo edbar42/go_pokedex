@@ -21,6 +21,13 @@ func CmdNotFoundErr() PokeError {
 	}
 }
 
+// Custom error for mapping back while at the first list of regions
+func NoPrevMapError() PokeError {
+	return PokeError{
+		Msg: "Hmm... I am not sure what you mean. Try `help` if you are feeling lost.",
+	}
+}
+
 // Custom printing for the help menu
 func PrintCmdUsage(s string) {
 	fmt.Printf("\t\x1b[32m%s\x1b[0m\n", s)
