@@ -14,6 +14,7 @@ func (pe *PokeError) Error() string {
 	return fmt.Sprintf("\033[31m%s\033[0m", pe.Msg)
 }
 
+// Custom error type for command not found
 func CmdNotFoundErr() PokeError {
 	return PokeError{
 		Msg: "Hmm... I am not sure what you mean. Try `help` if you are feeling lost.",
@@ -27,4 +28,9 @@ func PrintCmdUsage(s string) {
 
 func PrintCmdName(s string) {
 	fmt.Printf("\x1b[36m%s\x1b[0m\n", s)
+}
+
+// Custom printing for area names in mapped regions
+func PrintAreaName(s string) {
+	fmt.Printf("\x1b[1;35m%s\x1b[0m\n", s)
 }

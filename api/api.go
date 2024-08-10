@@ -17,7 +17,7 @@ type Regions struct {
 	} `json:"results"`
 }
 
-func fetchApi(url string) (Regions, error) {
+func FetchMappedRegions(url string) (Regions, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return Regions{}, err
@@ -25,7 +25,7 @@ func fetchApi(url string) (Regions, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode > 399 {
-		fmt.Errorf("bad status code: %v", resp.StatusCode)
+		return Regions{}, fmt.Errorf("bad status code: %v", resp.StatusCode)
 	}
 
 	data, err := io.ReadAll(resp.Body)

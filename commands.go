@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/edbar42/cfg"
+	"github.com/edbar42/go_pokedex/api"
 	"github.com/edbar42/go_pokedex/msg"
 )
 
@@ -12,7 +12,7 @@ type Command struct {
 	Name        string
 	Usage       string
 	Description string
-	Callback    func(cfg.CFG) error
+	Callback    func() error
 }
 
 var Commands map[string]Command
@@ -58,4 +58,9 @@ func exit() error {
 }
 
 func mapn() error {
+	regions, err := api.FetchMappedRegions("https://pokeapi.co/api/v2/location/")
+	for _, area := range regions.Results {
+		msg.PrintAreaName(area.Name)
+	}
+	return err
 }
