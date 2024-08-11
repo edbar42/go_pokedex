@@ -4,13 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/edbar42/go_pokedex/msg"
 )
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	cache := newCache()
+	cache := newCache(5 * time.Minute)
 
 	fmt.Print(msg.Prompt)
 
@@ -19,7 +20,7 @@ func main() {
 		command, exists := Commands[input]
 
 		if exists {
-			err := command.Callback(&cache)
+			err := command.Callback(cache)
 			if err != nil {
 				fmt.Println(err)
 			}
