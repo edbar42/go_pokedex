@@ -24,7 +24,7 @@ func CmdNotFoundErr() PokeError {
 // Custom error for mapping back while at the first list of regions
 func NoPrevMapError() PokeError {
 	return PokeError{
-		Msg: "Hmm... I am not sure what you mean. Try `help` if you are feeling lost.",
+		Msg: "There are no regions to list back to.",
 	}
 }
 
