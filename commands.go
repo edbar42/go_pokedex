@@ -71,6 +71,19 @@ func mapn(c *Cache) error {
 		reqURL = *c.NextMap
 	}
 
+	// Check for entries in cache
+	cachedMap, ok := c.MapCmdsCache[reqURL]
+	if ok {
+		c.NextMap = cachedMap.cachedData.Next
+		c.PrevMap = cachedMap.cachedData.Previous
+
+		for _, area := range cachedMap.cachedData.Results {
+			msg.PrintAreaName(area.Name)
+		}
+
+		return nil
+	}
+
 	regions, err := api.FetchMappedRegions(reqURL)
 	if err != nil {
 		return err
@@ -90,6 +103,19 @@ func mapp(c *Cache) error {
 	if c.PrevMap == nil {
 		noPrevErr := msg.NoPrevMapError()
 		return &noPrevErr
+	}
+
+	// Check for entries in cache
+	cachedMap, ok := c.MapCmdsCache[*c.PrevMap]
+	if ok {
+		c.NextMap = cachedMap.cachedData.Next
+		c.PrevMap = cachedMap.cachedData.Previous
+
+		for _, area := range cachedMap.cachedData.Results {
+			msg.PrintAreaName(area.Name)
+		}
+
+		return nil
 	}
 
 	regions, err := api.FetchMappedRegions(*c.PrevMap)
