@@ -27,14 +27,14 @@ func TestCache_AddAndGet(t *testing.T) {
 		t.Fatalf("Expected cache to contain entry for %s", url)
 	}
 
-	if retrievedCache.CachedData.Count != regions.Count {
-		t.Errorf("Expected count %d, got %d", regions.Count, retrievedCache.CachedData.Count)
+	if retrievedCache.Data.Count != regions.Count {
+		t.Errorf("Expected count %d, got %d", regions.Count, retrievedCache.Data.Count)
 	}
-	if len(retrievedCache.CachedData.Results) != len(regions.Results) {
-		t.Errorf("Expected %d results, got %d", len(regions.Results), len(retrievedCache.CachedData.Results))
+	if len(retrievedCache.Data.Results) != len(regions.Results) {
+		t.Errorf("Expected %d results, got %d", len(regions.Results), len(retrievedCache.Data.Results))
 	}
-	if retrievedCache.CachedData.Results[0].Name != regions.Results[0].Name {
-		t.Errorf("Expected name %s, got %s", regions.Results[0].Name, retrievedCache.CachedData.Results[0].Name)
+	if retrievedCache.Data.Results[0].Name != regions.Results[0].Name {
+		t.Errorf("Expected name %s, got %s", regions.Results[0].Name, retrievedCache.Data.Results[0].Name)
 	}
 }
 

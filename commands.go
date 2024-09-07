@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/edbar42/go_pokedex/api"
-	"github.com/edbar42/go_pokedex/msg"
+	"github.com/edbar42/go_pokedex/ui"
 )
 
 type Command struct {
@@ -49,8 +49,8 @@ func init() {
 func help(c *api.Cache) error {
 	for _, cmd := range Commands {
 		fmt.Println("------------------")
-		msg.PrintCmdName(cmd.Name)
-		msg.PrintCmdUsage(cmd.Usage)
+		ui.PrintCmdName(cmd.Name)
+		ui.PrintCmdUsage(cmd.Usage)
 		fmt.Printf("\t%s\n", cmd.Description)
 		fmt.Println("------------------")
 	}
@@ -74,11 +74,11 @@ func mapn(c *api.Cache) error {
 	// Check for entries in cache
 	cachedMap, ok := c.MapCmdsCache[reqURL]
 	if ok {
-		c.NextMap = cachedMap.CachedData.Next
-		c.PrevMap = cachedMap.CachedData.Previous
+		c.NextMap = cachedMap.Data.Next
+		c.PrevMap = cachedMap.Data.Previous
 
-		for _, area := range cachedMap.CachedData.Results {
-			msg.PrintAreaName(area.Name)
+		for _, area := range cachedMap.Data.Results {
+			ui.PrintAreaName(area.Name)
 		}
 
 		return nil
@@ -93,7 +93,7 @@ func mapn(c *api.Cache) error {
 	c.PrevMap = regions.Previous
 
 	for _, area := range regions.Results {
-		msg.PrintAreaName(area.Name)
+		ui.PrintAreaName(area.Name)
 	}
 
 	return err
@@ -101,18 +101,18 @@ func mapn(c *api.Cache) error {
 
 func mapp(c *api.Cache) error {
 	if c.PrevMap == nil {
-		noPrevErr := msg.NoPrevMapError()
+		noPrevErr := ui.NoPrevMapError()
 		return &noPrevErr
 	}
 
 	// Check for entries in cache
 	cachedMap, ok := c.MapCmdsCache[*c.PrevMap]
 	if ok {
-		c.NextMap = cachedMap.CachedData.Next
-		c.PrevMap = cachedMap.CachedData.Previous
+		c.NextMap = cachedMap.Data.Next
+		c.PrevMap = cachedMap.Data.Previous
 
-		for _, area := range cachedMap.CachedData.Results {
-			msg.PrintAreaName(area.Name)
+		for _, area := range cachedMap.Data.Results {
+			ui.PrintAreaName(area.Name)
 		}
 
 		return nil
@@ -127,7 +127,7 @@ func mapp(c *api.Cache) error {
 	c.PrevMap = regions.Previous
 
 	for _, area := range regions.Results {
-		msg.PrintAreaName(area.Name)
+		ui.PrintAreaName(area.Name)
 	}
 	return err
 }

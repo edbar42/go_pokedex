@@ -57,14 +57,14 @@ func (c *Cache) reapLoop() {
 
 // Model for caching requests from the map and mapb commands
 type MapCache struct {
-	CreatedAt  time.Time
-	CachedData Regions
+	CreatedAt time.Time
+	Data      Regions
 }
 
 // Returns map cache struct that to be stored in a map
 func NewMapCache(r Regions) MapCache {
 	return MapCache{
-		CreatedAt:  time.Now(),
-		CachedData: r,
+		CreatedAt: time.Now(),
+		Data:      r,
 	}
 }
