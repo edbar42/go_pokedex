@@ -6,12 +6,13 @@ import (
 	"os"
 	"time"
 
+	"github.com/edbar42/go_pokedex/api"
 	"github.com/edbar42/go_pokedex/msg"
 )
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	cache := newCache(5 * time.Minute)
+	cache := api.NewCache(5 * time.Minute)
 
 	fmt.Print(msg.Prompt)
 

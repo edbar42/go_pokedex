@@ -1,10 +1,8 @@
-package main
+package api
 
 import (
 	"sync"
 	"time"
-
-	"github.com/edbar42/go_pokedex/api"
 )
 
 // Model for application wide cache
@@ -17,7 +15,7 @@ type Cache struct {
 }
 
 // Returns new application cache
-func newCache(timeout time.Duration) *Cache {
+func NewCache(timeout time.Duration) *Cache {
 	c := Cache{
 		CacheTimeout: timeout,
 		NextMap:      nil,
@@ -49,7 +47,7 @@ func (c *Cache) reapLoop() {
 		c.mux.Lock()
 		now := time.Now()
 		for k, v := range c.MapCmdsCache {
-			if now.Sub(v.createdAt) > c.CacheTimeout {
+			if now.Sub(v.CreatedAt) > c.CacheTimeout {
 				delete(c.MapCmdsCache, k)
 			}
 		}
@@ -59,14 +57,14 @@ func (c *Cache) reapLoop() {
 
 // Model for caching requests from the map and mapb commands
 type MapCache struct {
-	createdAt  time.Time
-	cachedData api.Regions
+	CreatedAt  time.Time
+	CachedData Regions
 }
 
 // Returns map cache struct that to be stored in a map
-func NewMapCache(r api.Regions) MapCache {
+func NewMapCache(r Regions) MapCache {
 	return MapCache{
-		createdAt:  time.Now(),
-		cachedData: r,
+		CreatedAt:  time.Now(),
+		CachedData: r,
 	}
 }

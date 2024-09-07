@@ -12,7 +12,7 @@ type Command struct {
 	Name        string
 	Usage       string
 	Description string
-	Callback    func(c *Cache) error
+	Callback    func(c *api.Cache) error
 }
 
 var Commands map[string]Command
@@ -46,7 +46,7 @@ func init() {
 	}
 }
 
-func help(c *Cache) error {
+func help(c *api.Cache) error {
 	for _, cmd := range Commands {
 		fmt.Println("------------------")
 		msg.PrintCmdName(cmd.Name)
@@ -57,13 +57,13 @@ func help(c *Cache) error {
 	return nil
 }
 
-func exit(c *Cache) error {
+func exit(c *api.Cache) error {
 	fmt.Println("Good luck catching them all!")
 	os.Exit(0)
 	return nil
 }
 
-func mapn(c *Cache) error {
+func mapn(c *api.Cache) error {
 	var reqURL string
 	if c.NextMap == nil {
 		reqURL = "https://pokeapi.co/api/v2/location/"
@@ -74,10 +74,10 @@ func mapn(c *Cache) error {
 	// Check for entries in cache
 	cachedMap, ok := c.MapCmdsCache[reqURL]
 	if ok {
-		c.NextMap = cachedMap.cachedData.Next
-		c.PrevMap = cachedMap.cachedData.Previous
+		c.NextMap = cachedMap.CachedData.Next
+		c.PrevMap = cachedMap.CachedData.Previous
 
-		for _, area := range cachedMap.cachedData.Results {
+		for _, area := range cachedMap.CachedData.Results {
 			msg.PrintAreaName(area.Name)
 		}
 
@@ -99,7 +99,7 @@ func mapn(c *Cache) error {
 	return err
 }
 
-func mapp(c *Cache) error {
+func mapp(c *api.Cache) error {
 	if c.PrevMap == nil {
 		noPrevErr := msg.NoPrevMapError()
 		return &noPrevErr
@@ -108,10 +108,10 @@ func mapp(c *Cache) error {
 	// Check for entries in cache
 	cachedMap, ok := c.MapCmdsCache[*c.PrevMap]
 	if ok {
-		c.NextMap = cachedMap.cachedData.Next
-		c.PrevMap = cachedMap.cachedData.Previous
+		c.NextMap = cachedMap.CachedData.Next
+		c.PrevMap = cachedMap.CachedData.Previous
 
-		for _, area := range cachedMap.cachedData.Results {
+		for _, area := range cachedMap.CachedData.Results {
 			msg.PrintAreaName(area.Name)
 		}
 
