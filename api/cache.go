@@ -61,7 +61,7 @@ type MapCache struct {
 	Data      Regions
 }
 
-// Returns map cache struct that to be stored in a map
+// Returns cached regions names from mapping commands
 func NewMapCache(r Regions) MapCache {
 	return MapCache{
 		CreatedAt: time.Now(),

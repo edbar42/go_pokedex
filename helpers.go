@@ -15,14 +15,22 @@ func mapHelper(c *api.Cache, reqURL string) error {
 		c.NextMap = cachedMap.Data.Next
 		c.PrevMap = cachedMap.Data.Previous
 
-		ui.print
+		ui.PrintRegions(cachedMap)
+		return nil
 	}
-	// TODO: Implement this function.
-	// It should:
-	//		- Check for valid entries in the cache
-	//		- Update the cache state if the entry is found
-	//		- If it is not found, make an API request
-	//		- If the api call runs or mapos are cached, print the maps to the screen
-	//		- Return nil or error
+
+	regions, err := api.FetchMappedRegions(reqURL)
+	if err != nil {
+		return err
+	}
+
+	fetched := api.NewMapCache(regions)
+
+	c.Add(reqURL, fetched)
+	c.NextMap = regions.Next
+	c.PrevMap = regions.Previous
+
+	ui.PrintRegions(fetched)
+
 	return nil
 }
