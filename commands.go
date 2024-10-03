@@ -12,7 +12,7 @@ type Command struct {
 	Name        string
 	Usage       string
 	Description string
-	Callback    func(c *api.Cache) error
+	Callback    func(c *api.Cache, cmd_args []string) error
 }
 
 var Commands map[string]Command
@@ -43,10 +43,16 @@ func init() {
 			Description: "Lists the previous page of mapped regions.",
 			Callback:    mapp,
 		},
+		"explore": {
+			Name:        "Explore",
+			Usage:       "explore [AREA_NAME]",
+			Description: "Explore an area for Pokémons. To see area names, try map or mapb. ",
+			Callback:    explore,
+		},
 	}
 }
 
-func help(c *api.Cache) error {
+func help(c *api.Cache, cmd_args []string) error {
 	for _, cmd := range Commands {
 		fmt.Println("------------------")
 		ui.PrintCmdName(cmd.Name)
@@ -54,16 +60,18 @@ func help(c *api.Cache) error {
 		fmt.Printf("\t%s\n", cmd.Description)
 		fmt.Println("------------------")
 	}
+
+	fmt.Println(cmd_args)
 	return nil
 }
 
-func exit(c *api.Cache) error {
+func exit(c *api.Cache, cmd_args []string) error {
 	fmt.Println("Good luck catching them all!")
 	os.Exit(0)
 	return nil
 }
 
-func mapn(c *api.Cache) error {
+func mapn(c *api.Cache, cmd_args []string) error {
 	var reqURL string
 	if c.NextMap == nil {
 		reqURL = "https://pokeapi.co/api/v2/location/"
@@ -74,11 +82,15 @@ func mapn(c *api.Cache) error {
 	return mapHelper(c, reqURL)
 }
 
-func mapp(c *api.Cache) error {
+func mapp(c *api.Cache, cmd_args []string) error {
 	if c.PrevMap == nil {
 		noPrevErr := ui.NoPrevMapError()
 		return &noPrevErr
 	}
 
 	return mapHelper(c, *c.PrevMap)
+}
+
+func explore(c *api.Cache, cmd_args []string) error {
+	return nil
 }
