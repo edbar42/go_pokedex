@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/edbar42/go_pokedex/api"
@@ -18,10 +19,19 @@ func main() {
 
 	for scanner.Scan() {
 		input := scanner.Text()
-		command, exists := Commands[input]
+		args := strings.Fields(input)
+
+		if len(args) == 0 {
+			continue
+		}
+
+		cmd := args[0]
+		cmd_args := args[1:]
+
+		command, exists := Commands[cmd]
 
 		if exists {
-			err := command.Callback(cache)
+			err := command.Callback(cache, cmd_args)
 			if err != nil {
 				fmt.Println(err)
 			}
